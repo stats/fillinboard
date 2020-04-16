@@ -20,6 +20,10 @@ app.get('/fillin-map.png', (req, res) => {
   res.sendFile(__dirname + '/client/fillin-map-v2.png');
 });
 
+app.get('/DragDropTouch.js', (req, res) => {
+  res.sendFile(__dirname + '/client/DragDropTouch.js');
+})
+
 let http = createServer(app);
 
 let io = socketIo(http);
