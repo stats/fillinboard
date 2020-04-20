@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "nodemon --ignore \"client\" --exec node -r ts-node/register src/index.ts",
-    "start:prod": "node dist/index.js",
+    "start:prod": "pm2 start dist/index.js",
     "build": "tsc src/index.ts --outDir dist && cd src && copyfiles client/** ../dist"
   },
   "author": "Daniel Curran",
