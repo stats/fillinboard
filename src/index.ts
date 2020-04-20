@@ -1,5 +1,7 @@
 import express = require('express');
-import { Application } from 'express';
+import { Application, Router } from 'express';
+
+import { BASIC_USERS, ADMIN_USERS } from './users';
 
 import socketIo = require('socket.io');
 
@@ -7,14 +9,16 @@ import { createServer, Server } from 'http';
 
 let app: Application = express();
 
+const basicAuth = require('express-basic-auth');
+
 var clients = {};
 var units;
 
 resetUnits();
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/client/index.html');
-})
+  res.send('<h1>Fillin Board</h1>');
+});
 
 app.get('/fillin-map.png', (req, res) => {
   res.sendFile(__dirname + '/client/fillin-map-v2.png');
@@ -22,7 +26,33 @@ app.get('/fillin-map.png', (req, res) => {
 
 app.get('/DragDropTouch.js', (req, res) => {
   res.sendFile(__dirname + '/client/DragDropTouch.js');
-})
+});
+
+/**
+ * Basic Router with User Security
+ **/
+const router = Router();
+
+router.get('/', (req, res) => {
+  res.sendFile(__dirname + '/client/index.html');
+});
+
+app.use('/view', basicAuth({
+  challenge: true,
+  users: BASIC_USERS
+}), router);
+
+/**
+ * Admin Router with Admin Security
+ **/
+const admin = Router();
+admin.get('/', (req, res) => {
+  res.sendFile(__dirname + '/client/edit.html');
+});
+app.use('/admin', basicAuth({
+  challenge: true,
+  users: ADMIN_USERS
+}), admin);
 
 let http = createServer(app);
 
@@ -30,13 +60,16 @@ let io = socketIo(http);
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+
   clients[socket.id] = {};
+
+  socket.emit('units', units);
 
   socket.on('name message', (msg) => {
     console.log('Client Provided Name: ' + msg);
     clients[socket.id].name = msg;
     socket.emit('signed-in', clients[socket.id].name);
-    socket.emit('units', units)
+    socket.emit('units', units);
     socket.broadcast.emit('joined', clients[socket.id].name);
   });
 

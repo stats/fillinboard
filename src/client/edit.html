@@ -1,0 +1,232 @@
+<html>
+  <head>
+    <title>FillIn Client - Administration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      #waiting-preloader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+      }
+
+      #add-unit, #remove-unit {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        padding: 10px;
+        z-index: 999;
+      }
+
+      .unit {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        cursor: grab;
+      }
+
+      .unit:active {
+        cursor: grabbing;
+      }
+
+      #fill-in-image {
+        background: url('/fillin-map.png') no-repeat;
+        width: 1600px;
+        height: 1514px;
+        margin-left: 12px;
+        margin-top: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="card" id="sign-in">
+        <div class="row">
+          <div class="col s12">
+            <p>Sign in to access the Fillin Board</p>
+          </div>
+        </div>
+        <div class="row">
+          <form action="" class="col s12" id="sign-in-form">
+            <input id="name" autocomplete="off" placeholder="Enter your name"/>
+            <button class="btn">Sign In</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="fillin-board">
+      <div id="fill-in-image">
+
+      </div>
+
+      <div id="units">
+      </div>
+    </div>
+
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large red">
+        <i class="large material-icons">mode_edit</i>
+      </a>
+      <ul>
+        <li><a class="btn-floating red" onclick="showAddUnit()"><i class="material-icons">add_circle</i></a></li>
+        <li><a class="btn-floating yellow darken-1" onclick="showRemoveUnit()"><i class="material-icons">remove_circle</i></a></li>
+        <li><a class="btn-floating yellow darken-1" id="reset-units"><i class="material-icons">clear</i></a></li>
+      </ul>
+    </div>
+
+    <div id="add-unit" class="card">
+      <div class="row">
+        <form action="" class="col s12" id="add-unit-form">
+          <div class="row">
+            <input id="add-unit-id" autocomplete="off" placeholder="Unit ID"/>
+          </div>
+          <div class="row">
+            <input id="add-unit-color" autocomplete="off" placeholder="Unit color"/>
+          </div>
+          <button class="btn">Add Unit</button>
+          <button class="btn" onclick="hideAddUnit()" type="button">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="remove-unit" class="card">
+      <div class="row">
+        <form action="" class="col s12" id="remove-unit-form">
+          <input id="remove-unit-id" autocomplete="off" placeholder="Unit ID"/>
+          <button class="btn">Remove Unit</button>
+          <button class="btn" onclick="hideRemoveUnit()" type="button">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="waiting-preloader" class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="DragDropTouch.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      $(function() {
+        var socket = io();
+
+        $('#sign-in-form').submit(function(e) {
+          e.preventDefault();
+          socket.emit('name message', $('#name').val());
+          $('#sign-in').hide();
+          $('#waiting-preloader').show();
+          return false;
+        });
+
+        $('#add-unit-form').submit(function(e) {
+          e.preventDefault();
+          socket.emit('add-unit', {
+            id: $('#add-unit-id').val(),
+            color: $('#add-unit-color').val(),
+            top: 50,
+            left: 50
+          });
+          $('#add-unit').hide();
+          return false;
+        });
+
+        $('#remove-unit-form').submit(function(e) {
+          e.preventDefault();
+          socket.emit('remove-unit', {id: $('#remove-unit-id').val()});
+          $('#remove-unit').hide();
+          return false;
+        });
+
+        $('#reset-units').on('click', function(e) {
+          console.log('Reset units called');
+          socket.emit('reset-units');
+        })
+
+        socket.on('signed-in', function(msg) {
+          console.log('signed-in event fired', msg);
+          $('#waiting-preloader').hide();
+          $('#fillin-board').show();
+          $('.fixed-action-btn').show();
+          M.toast({
+            html: 'You have signed in as ' + msg
+          });
+        });
+
+        socket.on('message', function(msg) {
+          console.log('Message', msg);
+          M.toast({
+            html: msg
+          });
+        });
+
+        socket.on('add-error', function(msg) {
+          console.log('error', msg);
+          M.toast({
+            html: 'Error: ' + msg
+          });
+        });
+
+        socket.on('units', function(msg) {
+          console.log('Units: ', msg);
+          $('#units').empty();
+          for(let i = 0; i < msg.length; i++) {
+            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large waves-effect waves-light ' + msg[i].color + ' unit" draggable="true">'+ msg[i].id +'</a>');
+            el.css({top: msg[i].top, left: msg[i].left});
+            $('#units').append(el)
+          }
+        })
+
+        socket.on('joined', function(msg){
+          M.toast({
+            html: msg + ' joined'
+          });
+        });
+
+        $(document).ready(function() {
+          $('#waiting-preloader').hide();
+          $('#fillin-board').hide();
+          $('#add-unit').hide();
+          $('#remove-unit').hide();
+          $('.fixed-action-btn').floatingActionButton();
+          $('.fixed-action-btn').hide();
+        });
+
+        $(document).on("dragend", function(event) {
+          const dt = $(event.target);
+          console.log(event);
+          const top = event.pageY - dt.height()/2;
+          const left = event.pageX - dt.width()/2;
+          socket.emit('change-unit', {id: dt.attr('id'), top: top, left: left});
+        });
+      });
+
+      function showAddUnit() {
+        $("#add-unit").show();
+      }
+
+      function hideAddUnit() {
+        $("#add-unit").hide();
+      }
+
+      function showRemoveUnit(){
+        $("#remove-unit").show();
+      }
+
+      function hideRemoveUnit() {
+        $("#remove-unit").hide();
+      }
+
+    </script>
+  </body>
+</html>
