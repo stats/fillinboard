@@ -1,7 +1,7 @@
 import express = require('express');
 import { Application, Router } from 'express';
 
-import { BASIC_USERS, ADMIN_USERS } from './users';
+import { BASIC_USERS, ADMIN_USERS } from '../users';
 
 import socketIo = require('socket.io');
 

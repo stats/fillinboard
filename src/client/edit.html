@@ -10,12 +10,13 @@
         left: 50%;
       }
 
-      #add-unit, #remove-unit {
+      #add-unit, #remove-unit, #clear-units {
         position: absolute;
         top: 50%;
         left: 50%;
         padding: 10px;
         z-index: 999;
+        border: 1px solid black;
       }
 
       .unit {
@@ -72,7 +73,7 @@
       <ul>
         <li><a class="btn-floating red" onclick="showAddUnit()"><i class="material-icons">add_circle</i></a></li>
         <li><a class="btn-floating yellow darken-1" onclick="showRemoveUnit()"><i class="material-icons">remove_circle</i></a></li>
-        <li><a class="btn-floating yellow darken-1" id="reset-units"><i class="material-icons">clear</i></a></li>
+        <li><a class="btn-floating yellow darken-1" onclick="showClearUnits()"><i class="material-icons">clear</i></a></li>
       </ul>
     </div>
 
@@ -81,9 +82,35 @@
         <form action="" class="col s12" id="add-unit-form">
           <div class="row">
             <input id="add-unit-id" autocomplete="off" placeholder="Unit ID"/>
+            <label>Unit ID</label>
           </div>
           <div class="row">
-            <input id="add-unit-color" autocomplete="off" placeholder="Unit color"/>
+            <div class="input-field col s12">
+              <select id="add-unit-color">
+                <option value="red">Choose your option</option>
+                <option>red</option>
+                <option>pink</option>
+                <option>purple</option>
+                <option>deep-durple</option>
+                <option>indigo</option>
+                <option>blue</option>
+                <option>light-blue</option>
+                <option>cyan</option>
+                <option>teal</option>
+                <option>green</option>
+                <option>light-green</option>
+                <option>lime</option>
+                <option>yellow</option>
+                <option>amber</option>
+                <option>orange</option>
+                <option>deep-orange</option>
+                <option>brown</option>
+                <option>grey</option>
+                <option>blue-grey</option>
+                <option>black</option>
+              </select>
+              <label>Select Unit Color</label>
+            </div>
           </div>
           <button class="btn">Add Unit</button>
           <button class="btn" onclick="hideAddUnit()" type="button">Cancel</button>
@@ -97,6 +124,15 @@
           <input id="remove-unit-id" autocomplete="off" placeholder="Unit ID"/>
           <button class="btn">Remove Unit</button>
           <button class="btn" onclick="hideRemoveUnit()" type="button">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="clear-units" class="card">
+      <div class="row">
+        <form action="" class="col s12" id="reset-units">
+          <button class="btn">Reset All Units!</button>
+          <button class="btn" onclick="hideClearUnits()" type="button">Cancel</button>
         </form>
       </div>
     </div>
@@ -148,9 +184,12 @@
           return false;
         });
 
-        $('#reset-units').on('click', function(e) {
+        $('#reset-units').submit(function(e) {
+          e.preventDefault();
           console.log('Reset units called');
           socket.emit('reset-units');
+          $('#clear-units').hide();
+          return false;
         })
 
         socket.on('signed-in', function(msg) {
@@ -198,8 +237,10 @@
           $('#fillin-board').hide();
           $('#add-unit').hide();
           $('#remove-unit').hide();
+          $('#clear-units').hide();
           $('.fixed-action-btn').floatingActionButton();
           $('.fixed-action-btn').hide();
+          $('select').formSelect();
         });
 
         $(document).on("dragend", function(event) {
@@ -225,6 +266,14 @@
 
       function hideRemoveUnit() {
         $("#remove-unit").hide();
+      }
+
+      function showClearUnits() {
+        $('#clear-units').show();
+      }
+
+      function hideClearUnits() {
+        $('#clear-units').hide();
       }
 
     </script>
