@@ -10,15 +10,6 @@
         left: 50%;
       }
 
-      #add-unit, #remove-unit, #clear-units {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        padding: 10px;
-        z-index: 999;
-        border: 1px solid black;
-      }
-
       .unit {
         position: absolute;
         top: 50px;
@@ -30,6 +21,11 @@
         cursor: grabbing;
       }
 
+      .modal h4 {
+        padding-bottom: 8px;
+        margin-left: -2px;
+      }
+
       #fill-in-image {
         background: url('/fillin-map.png') no-repeat;
         width: 1600px;
@@ -37,22 +33,27 @@
         margin-left: 12px;
         margin-top: 0px;
       }
+
+      .modal {
+        overflow-y: visible
+      }
     </style>
   </head>
   <body>
     <div class="container">
 
-      <div class="card" id="sign-in">
-        <div class="row">
-          <div class="col s12">
-            <p>Sign in to access the Fillin Board</p>
+      <div class="modal" id="sign-in">
+        <div class="modal-content">
+          <h4>Sign In</h4>
+          <div class="row">
+            <form action="" id="sign-in-form">
+              <div class="input-field">
+                <input id="name" type="text" autocomplete="off" placeholder="Enter your name" class="validate" required/>
+                <label>Enter your name</label>
+              </div>
+              <button class="btn">Sign In</button>
+            </form>
           </div>
-        </div>
-        <div class="row">
-          <form action="" class="col s12" id="sign-in-form">
-            <input id="name" autocomplete="off" placeholder="Enter your name"/>
-            <button class="btn">Sign In</button>
-          </form>
         </div>
       </div>
     </div>
@@ -71,69 +72,105 @@
         <i class="large material-icons">mode_edit</i>
       </a>
       <ul>
-        <li><a class="btn-floating red" onclick="showAddUnit()"><i class="material-icons">add_circle</i></a></li>
+        <li><a class="btn-floating grey" onclick="showUsers()"><i class="material-icons">people</i></a></li>
+        <li><a class="btn-floating red darken-1" onclick="showClearUnits()"><i class="material-icons">clear</i></a></li>
         <li><a class="btn-floating yellow darken-1" onclick="showRemoveUnit()"><i class="material-icons">remove_circle</i></a></li>
-        <li><a class="btn-floating yellow darken-1" onclick="showClearUnits()"><i class="material-icons">clear</i></a></li>
+        <li><a class="btn-floating green darken-1" onclick="showAddUnit()"><i class="material-icons">add_circle</i></a></li>
       </ul>
     </div>
 
-    <div id="add-unit" class="card">
-      <div class="row">
-        <form action="" class="col s12" id="add-unit-form">
+    <div id="add-unit" class="modal">
+      <form action="" id="add-unit-form">
+        <div class="modal-content">
+          <h4>Add new unit</h4>
           <div class="row">
-            <input id="add-unit-id" autocomplete="off" placeholder="Unit ID"/>
-            <label>Unit ID</label>
+              <div class="row">
+                <div class="input-field">
+                  <input id="add-unit-id" type="text" autocomplete="off" placeholder="Unit ID"/>
+                  <label>Unit ID</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field">
+                  <select id="add-unit-color">
+                    <option value="red">Choose your option</option>
+                    <option>red</option>
+                    <option>pink</option>
+                    <option>purple</option>
+                    <option>deep-durple</option>
+                    <option>indigo</option>
+                    <option>blue</option>
+                    <option>light-blue</option>
+                    <option>cyan</option>
+                    <option>teal</option>
+                    <option>green</option>
+                    <option>light-green</option>
+                    <option>lime</option>
+                    <option>yellow</option>
+                    <option>amber</option>
+                    <option>orange</option>
+                    <option>deep-orange</option>
+                    <option>brown</option>
+                    <option>grey</option>
+                    <option>blue-grey</option>
+                    <option>black</option>
+                  </select>
+                  <label>Select Unit Color</label>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="row">
-            <div class="input-field col s12">
-              <select id="add-unit-color">
-                <option value="red">Choose your option</option>
-                <option>red</option>
-                <option>pink</option>
-                <option>purple</option>
-                <option>deep-durple</option>
-                <option>indigo</option>
-                <option>blue</option>
-                <option>light-blue</option>
-                <option>cyan</option>
-                <option>teal</option>
-                <option>green</option>
-                <option>light-green</option>
-                <option>lime</option>
-                <option>yellow</option>
-                <option>amber</option>
-                <option>orange</option>
-                <option>deep-orange</option>
-                <option>brown</option>
-                <option>grey</option>
-                <option>blue-grey</option>
-                <option>black</option>
-              </select>
-              <label>Select Unit Color</label>
-            </div>
-          </div>
+        </div>
+        <div class="modal-footer">
           <button class="btn">Add Unit</button>
           <button class="btn" onclick="hideAddUnit()" type="button">Cancel</button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
 
-    <div id="remove-unit" class="card">
-      <div class="row">
-        <form action="" class="col s12" id="remove-unit-form">
-          <input id="remove-unit-id" autocomplete="off" placeholder="Unit ID"/>
-          <button class="btn">Remove Unit</button>
+    <div id="remove-unit" class="modal">
+      <form action="" id="remove-unit-form">
+        <div class="modal-content">
+          <h4>Remove Unit</h4>
+          <div class="row">
+            <div class="row">
+              <div class="input-field">
+                <input type="text" id="remove-unit-id" autocomplete="off" placeholder="Unit ID"/>
+                <label>Unit ID</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn red">Remove Unit</button>
           <button class="btn" onclick="hideRemoveUnit()" type="button">Cancel</button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
 
-    <div id="clear-units" class="card">
-      <div class="row">
+    <div id="clear-units" class="modal">
+      <div class="modal-content">
+        <h4>Are you sure?</h4>
+        <p>All changes will be reset to a base RFD deployment model.</p>
+      </div>
+      <div class="modal-footer">
         <form action="" class="col s12" id="reset-units">
-          <button class="btn">Reset All Units!</button>
+          <button class="btn red">Reset All Units!</button>
           <button class="btn" onclick="hideClearUnits()" type="button">Cancel</button>
         </form>
+      </div>
+    </div>
+
+    <div id="users" class="modal">
+      <div class="modal-content">
+        <h4>Current Users</h4>
+        <p id="user-count"></p>
+        <ul id="user-list">
+
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" onclick="hideUsers()">Close</button>
       </div>
     </div>
 
@@ -159,8 +196,8 @@
 
         $('#sign-in-form').submit(function(e) {
           e.preventDefault();
-          socket.emit('name message', $('#name').val());
-          $('#sign-in').hide();
+          socket.emit('submit-name', $('#name').val());
+          $('#sign-in').modal('close');
           $('#waiting-preloader').show();
           return false;
         });
@@ -186,14 +223,12 @@
 
         $('#reset-units').submit(function(e) {
           e.preventDefault();
-          console.log('Reset units called');
           socket.emit('reset-units');
           $('#clear-units').hide();
           return false;
         })
 
         socket.on('signed-in', function(msg) {
-          console.log('signed-in event fired', msg);
           $('#waiting-preloader').hide();
           $('#fillin-board').show();
           $('.fixed-action-btn').show();
@@ -203,21 +238,31 @@
         });
 
         socket.on('message', function(msg) {
-          console.log('Message', msg);
           M.toast({
             html: msg
           });
         });
 
+        socket.on('users', function(msg) {
+          $('#user-list').empty();
+          $('#user-count').html('<strong>Number signed in: ' + msg.length + '</strong>');
+          if(msg.length == 0) {
+            $('#user-list').append('<li>No users signed in.</li>');
+          } else {
+            for(let i = 0; i < msg.length; i++) {
+              let el = $('<li>' + msg[i] + '</li>');
+              $('#user-list').append(el);
+            }
+          }
+        });
+
         socket.on('add-error', function(msg) {
-          console.log('error', msg);
           M.toast({
             html: 'Error: ' + msg
           });
         });
 
         socket.on('units', function(msg) {
-          console.log('Units: ', msg);
           $('#units').empty();
           for(let i = 0; i < msg.length; i++) {
             let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large waves-effect waves-light ' + msg[i].color + ' unit" draggable="true">'+ msg[i].id +'</a>');
@@ -235,45 +280,52 @@
         $(document).ready(function() {
           $('#waiting-preloader').hide();
           $('#fillin-board').hide();
-          $('#add-unit').hide();
-          $('#remove-unit').hide();
-          $('#clear-units').hide();
           $('.fixed-action-btn').floatingActionButton();
           $('.fixed-action-btn').hide();
           $('select').formSelect();
+          $('.modal').modal();
+          $('#sign-in').modal({ dismissible: false });
+          $('#sign-in').modal('open');
         });
 
         $(document).on("dragend", function(event) {
           const dt = $(event.target);
-          console.log(event);
           const top = event.pageY - dt.height()/2;
           const left = event.pageX - dt.width()/2;
           socket.emit('change-unit', {id: dt.attr('id'), top: top, left: left});
         });
       });
 
+      function showUsers() {
+        $('#users').modal('open');
+      }
+
+      function hideUsers() {
+        $('#users').modal('close');
+      }
+
       function showAddUnit() {
-        $("#add-unit").show();
+        $("#add-unit").modal('open');
       }
 
       function hideAddUnit() {
-        $("#add-unit").hide();
+        $("#add-unit").modal('close');
       }
 
       function showRemoveUnit(){
-        $("#remove-unit").show();
+        $("#remove-unit").modal('open');
       }
 
       function hideRemoveUnit() {
-        $("#remove-unit").hide();
+        $("#remove-unit").modal('close');
       }
 
       function showClearUnits() {
-        $('#clear-units').show();
+        $('#clear-units').modal('open');
       }
 
       function hideClearUnits() {
-        $('#clear-units').hide();
+        $('#clear-units').modal('close');
       }
 
     </script>
