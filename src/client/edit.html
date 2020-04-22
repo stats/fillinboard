@@ -84,45 +84,44 @@
         <div class="modal-content">
           <h4>Add new unit</h4>
           <div class="row">
-              <div class="row">
-                <div class="input-field">
-                  <input id="add-unit-id" type="text" autocomplete="off" placeholder="Unit ID"/>
-                  <label>Unit ID</label>
-                </div>
+            <div class="row">
+              <div class="input-field">
+                <input id="add-unit-id" type="text" autocomplete="off" placeholder="Unit ID"/>
+                <label>Unit ID</label>
               </div>
-              <div class="row">
-                <div class="input-field">
-                  <select id="add-unit-color">
-                    <option value="red">Choose your option</option>
-                    <option>red</option>
-                    <option>pink</option>
-                    <option>purple</option>
-                    <option>deep-durple</option>
-                    <option>indigo</option>
-                    <option>blue</option>
-                    <option>light-blue</option>
-                    <option>cyan</option>
-                    <option>teal</option>
-                    <option>green</option>
-                    <option>light-green</option>
-                    <option>lime</option>
-                    <option>yellow</option>
-                    <option>amber</option>
-                    <option>orange</option>
-                    <option>deep-orange</option>
-                    <option>brown</option>
-                    <option>grey</option>
-                    <option>blue-grey</option>
-                    <option>black</option>
-                  </select>
-                  <label>Select Unit Color</label>
-                </div>
+            </div>
+            <div class="row">
+              <div class="input-field">
+                <select id="add-unit-color">
+                  <option value="red">Choose your option</option>
+                  <option>red</option>
+                  <option>pink</option>
+                  <option>purple</option>
+                  <option>deep-durple</option>
+                  <option>indigo</option>
+                  <option>blue</option>
+                  <option>light-blue</option>
+                  <option>cyan</option>
+                  <option>teal</option>
+                  <option>green</option>
+                  <option>light-green</option>
+                  <option>lime</option>
+                  <option>yellow</option>
+                  <option>amber</option>
+                  <option>orange</option>
+                  <option>deep-orange</option>
+                  <option>brown</option>
+                  <option>grey</option>
+                  <option>blue-grey</option>
+                  <option>black</option>
+                </select>
+                <label>Select Unit Color</label>
               </div>
-            </form>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn">Add Unit</button>
+          <button type="submit" class="btn">Add Unit</button>
           <button class="btn" onclick="hideAddUnit()" type="button">Cancel</button>
         </div>
       </form>
@@ -204,6 +203,7 @@
 
         $('#add-unit-form').submit(function(e) {
           e.preventDefault();
+          console.log("Add Unit");
           socket.emit('add-unit', {
             id: $('#add-unit-id').val(),
             color: $('#add-unit-color').val(),
