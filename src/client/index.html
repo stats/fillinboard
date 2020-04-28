@@ -4,24 +4,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-      #waiting-preloader {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-      }
-
-      #add-unit, #remove-unit {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        padding: 10px;
-        z-index: 999;
-      }
-
       .unit {
         position: absolute;
         top: 50px;
         left: 50px;
+        border-radius: 0;
+        font-size: 12px;
+        height: 30px !important;
+        width: 60px !important;
+        line-height: 26px !important;
+        border: 2px solid white;
+      }
+
+      .on-call {
+        transform: rotate(90deg);
+      }
+
+      .has-tool {
+        background: url('/tool.png') no-repeat;
+        background-position: right 2px center;
       }
 
       #fill-in-image {
@@ -67,8 +68,14 @@
         socket.on('units', function(msg) {
           $('#units').empty();
           for(let i = 0; i < msg.length; i++) {
-            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large waves-effect waves-light ' + msg[i].color + ' unit">'+ msg[i].id +'</a>');
+            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large ' + msg[i].color + ' unit">'+ msg[i].id +'</a>');
             el.css({top: msg[i].top, left: msg[i].left});
+            if(msg[i].onCall != null && msg[i].onCall == true) {
+              el.addClass('on-call');
+            }
+            if(msg[i].hasTool != null && msg[i].hasTool == true) {
+              el.addClass('has-tool');
+            }
             $('#units').append(el)
           }
         });

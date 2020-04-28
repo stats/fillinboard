@@ -15,6 +15,12 @@
         top: 50px;
         left: 50px;
         cursor: grab;
+        border-radius: 0;
+        font-size: 12px;
+        height: 30px !important;
+        width: 60px !important;
+        line-height: 26px !important;
+        border: 2px solid white;
       }
 
       .unit:active {
@@ -26,10 +32,19 @@
         margin-left: -2px;
       }
 
+      .on-call {
+        transform: rotate(90deg);
+      }
+
+      .has-tool {
+        background: url('/tool.png') no-repeat;
+        background-position: right 2px center;
+      }
+
       #fill-in-image {
         background: url('/fillin-map.png') no-repeat;
-        width: 1600px;
-        height: 1514px;
+        width: 740px;
+        height: 700px;
         margin-left: 12px;
         margin-top: 0px;
       }
@@ -94,29 +109,20 @@
               <div class="input-field">
                 <select id="add-unit-color">
                   <option value="red">Choose your option</option>
-                  <option>red</option>
-                  <option>pink</option>
-                  <option>purple</option>
-                  <option>deep-durple</option>
-                  <option>indigo</option>
-                  <option>blue</option>
-                  <option>light-blue</option>
-                  <option>cyan</option>
-                  <option>teal</option>
-                  <option>green</option>
-                  <option>light-green</option>
-                  <option>lime</option>
-                  <option>yellow</option>
-                  <option>amber</option>
-                  <option>orange</option>
-                  <option>deep-orange</option>
-                  <option>brown</option>
-                  <option>grey</option>
-                  <option>blue-grey</option>
-                  <option>black</option>
+                  <option value="black">RFD Engine</option>
+                  <option value="blue">RFD Rescue</option>
+                  <option value="red">RFD Truck</option>
+                  <option value="pink">Fill-in Engine</option>
+                  <option value="orange">Fill-in Truck</option>
                 </select>
                 <label>Select Unit Color</label>
               </div>
+            </div>
+            <div class="row">
+              <label>
+                <input id="add-unit-tool" type="checkbox" class="filled-in">
+                <span>Has Tool</span>
+              </label>
             </div>
           </div>
         </div>
@@ -131,13 +137,11 @@
       <form action="" id="remove-unit-form">
         <div class="modal-content">
           <h4>Remove Unit</h4>
-          <div class="row">
-            <div class="row">
-              <div class="input-field">
-                <input type="text" id="remove-unit-id" autocomplete="off" placeholder="Unit ID"/>
-                <label>Unit ID</label>
-              </div>
-            </div>
+          <div class="input-field">
+            <select id="remove-unit-id">
+              <option>Choose a unit</option>
+            </select>
+            <label>Unit to Remove</label>
           </div>
         </div>
         <div class="modal-footer">
@@ -203,10 +207,11 @@
 
         $('#add-unit-form').submit(function(e) {
           e.preventDefault();
-          console.log("Add Unit");
+          console.log("Add Unit", $('#add-unit-tool').val());
           socket.emit('add-unit', {
             id: $('#add-unit-id').val(),
             color: $('#add-unit-color').val(),
+            hasTool: $('#add-unit-tool').is(':checked') ? true : false,
             top: 50,
             left: 50
           });
@@ -226,6 +231,11 @@
           socket.emit('reset-units');
           $('#clear-units').hide();
           return false;
+        })
+
+        $(document).on('dblclick', '.unit', function() {
+          console.log("dblclick", $(this).attr('id'));
+          socket.emit('toggle-on-call', { id: $(this).attr('id') });
         })
 
         socket.on('signed-in', function(msg) {
@@ -265,10 +275,23 @@
         socket.on('units', function(msg) {
           $('#units').empty();
           for(let i = 0; i < msg.length; i++) {
-            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large waves-effect waves-light ' + msg[i].color + ' unit" draggable="true">'+ msg[i].id +'</a>');
+            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large ' + msg[i].color + ' unit" draggable="true">'+ msg[i].id +'</a>');
             el.css({top: msg[i].top, left: msg[i].left});
+            if(msg[i].onCall != null && msg[i].onCall == true) {
+              el.addClass('on-call');
+            }
+            if(msg[i].hasTool != null && msg[i].hasTool == true) {
+              el.addClass('has-tool');
+            }
             $('#units').append(el)
           }
+
+          $('#remove-unit-id').empty();
+          $('#remove-unit-id').append('<option>Select a unit to remove</option>');
+          for(let i = msg.length - 1; i >= 0; i--) {
+            $('#remove-unit-id').append('<option>' + msg[i].id + '</option>');
+          }
+          $('#remove-unit-id').formSelect();
         })
 
         socket.on('joined', function(msg){
