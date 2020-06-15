@@ -7,7 +7,7 @@ import socketIo = require('socket.io');
 
 import { createServer, Server } from 'http';
 
-import moment from 'moment';
+var moment = require('moment');
 
 let app: Application = express();
 
