@@ -7,12 +7,16 @@ import socketIo = require('socket.io');
 
 import { createServer, Server } from 'http';
 
+import moment from 'moment';
+
 let app: Application = express();
 
 const basicAuth = require('express-basic-auth');
 
 var clients = {};
 var units;
+var title = { user: 'system', text: 'Title Not Set', date: moment().format('MM/DD/YY HH:mm:ss') }
+var messages = [];
 
 resetUnits();
 
@@ -24,8 +28,12 @@ app.get('/tool.png', (req, res) => {
   res.sendFile(__dirname + '/client/tool.png');
 });
 
+app.get('/style.css', (req, res) => {
+  res.sendFile(__dirname + '/client/style.css');
+});
+
 app.get('/fillin-map.png', (req, res) => {
-  res.sendFile(__dirname + '/client/fillin-map-v3.png');
+  res.sendFile(__dirname + '/client/fillin-map-v4.png');
 });
 
 app.get('/DragDropTouch.js', (req, res) => {
@@ -68,15 +76,40 @@ io.on('connection', (socket) => {
   clients[socket.id] = {};
 
   socket.emit('units', units);
+  socket.emit('set-title', title);
+
+  socket.on('chat', (msg) => {
+    let message = {
+      user: clients[socket.id].name,
+      text: msg,
+      date: moment().format('MM/DD/YY HH:mm:ss')
+    }
+    messages.push(message);
+    if(messages.length > 50) {
+      messages.shift();
+    }
+    io.sockets.emit('chat', message);
+  });
 
   socket.on('submit-name', (msg) => {
     console.log('Client Submitted Name: ' + msg);
     clients[socket.id].name = msg;
     socket.emit('signed-in', clients[socket.id].name);
     socket.emit('units', units);
+    socket.emit('set-title', title);
+    socket.emit('recent-chat', messages);
     io.sockets.emit('users', clientsToStringArray(clients));
     socket.broadcast.emit('joined', clients[socket.id].name);
   });
+
+  socket.on('set-title', (msg) => {
+    title = {
+      user: clients[socket.id].name,
+      text: msg,
+      date: moment().format('MM/DD/YY HH:mm:ss')
+    }
+    io.sockets.emit('set-title', title);
+  })
 
   socket.on('change-unit', (msg) => {
     console.log('Client changed a unit', msg);
@@ -110,8 +143,10 @@ io.on('connection', (socket) => {
   socket.on('reset-units', (msg) => {
     console.log("Reset Units called.");
     resetUnits();
+    title = { user: 'system', text: 'Title Not Set', date: moment().format('MM/DD/YY HH:mm:ss') };
     io.sockets.emit('message', clients[socket.id].name + " has reset all units.");
     io.sockets.emit('units', units);
+    io.sockets.emit('set-title', title);
   });
 
   socket.on('toggle-on-call', (msg) => {
@@ -147,24 +182,26 @@ function clientsToStringArray(clients) {
 }
 
 function resetUnits() {
-  units = [ { id: 'E1', top: 478, left: 299, color: 'black', hasTool: true },
-  { id: 'E2', top: 311, left: 242, color: 'black' },
-  { id: 'E3', top: 351, left: 99, color: 'black' },
-  { id: 'E5', top: 395, left: 151, color: 'black' },
-  { id: 'E7', top: 533, left: 156, color: 'black' },
-  { id: 'E8', top: 582, left: 327, color: 'black' },
-  { id: 'E9', top: 354, left: 377, color: 'black'},
-  { id: 'E10', top: 264, left: 151, color: 'black', hasTool: true },
-  { id: 'E12', top: 425, left: 440, color: 'black'},
-  { id: 'E13', top: 443, left: 191, color: 'black' },
-  { id: 'E16', top: 335, left: 301, color: 'black' },
-  { id: 'E17', top: 403, left: 278, color: 'black' },
-  { id: 'E19', top: 88, left: 223, color: 'black' },
-  { id: 'T2', top: 295, left: 150, color: 'red' },
-  { id: 'T3', top: 552, left: 230, color: 'red' },
-  { id: 'T4', top: 480, left: 401, color: 'red' },
-  { id: 'T5', top: 459, left: 107, color: 'red' },
-  { id: 'T6', top: 359, left: 301, color: 'red' },
-  { id: 'T10', top: 474, left: 189, color: 'red' },
-  { id: 'R11', top: 427, left: 278, color: 'blue', hasTool: true } ];
+  units = [
+    {"id":"E1","top":475,"left":329,"color":"black","hasTool":true},
+    {"id":"E2","top":318,"left":274,"color":"black"},
+    {"id":"E3","top":361,"left":125,"color":"black"},
+    {"id":"E5","top":400,"left":180,"color":"black"},
+    {"id":"E7","top":536,"left":185,"color":"black"},
+    {"id":"E8","top":597,"left":361,"color":"black"},
+    {"id":"E9","top":366,"left":406,"color":"black"},
+    {"id":"E10","top":272,"left":180,"color":"black","hasTool":true},
+    {"id":"E12","top":424,"left":464,"color":"black"},
+    {"id":"E13","top":443,"left":217,"color":"black"},
+    {"id":"E16","top":340,"left":323,"color":"black"},
+    {"id":"E17","top":402,"left":315,"color":"black"},
+    {"id":"E19","top":95,"left":254,"color":"black"},
+    {"id":"T2","top":299,"left":179,"color":"red"},
+    {"id":"T3","top":562,"left":258,"color":"red"},
+    {"id":"T4","top":479,"left":427,"color":"red"},
+    {"id":"T5","top":464,"left":132,"color":"red"},
+    {"id":"T6","top":369,"left":322,"color":"red"},
+    {"id":"T10","top":470,"left":216,"color":"red"},
+    {"id":"R11","top":429,"left":313,"color":"blue","hasTool":true}
+  ];
 }

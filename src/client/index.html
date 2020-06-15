@@ -3,38 +3,15 @@
     <title>FillIn Client</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-      .unit {
-        position: absolute;
-        top: 50px;
-        left: 50px;
-        border-radius: 0;
-        font-size: 12px;
-        height: 30px !important;
-        width: 60px !important;
-        line-height: 26px !important;
-        border: 2px solid white;
-      }
-
-      .on-call {
-        transform: rotate(90deg);
-      }
-
-      .has-tool {
-        background: url('/tool.png') no-repeat;
-        background-position: right 2px center;
-      }
-
-      #fill-in-image {
-        background: url('/fillin-map.png') no-repeat;
-        width: 1600px;
-        height: 1514px;
-        margin-left: 12px;
-        margin-top: 0px;
-      }
-    </style>
+    <link href="/style.css" rel="stylesheet">
   </head>
   <body>
+
+    <div id="title">
+      <h1>No Scenario Set</h1>
+      <h2>Default title not changed</h2>
+    </div>
+
     <div id="fillin-board">
       <div id="fill-in-image">
 
@@ -56,6 +33,11 @@
           M.toast({
             html: msg
           });
+        });
+
+        socket.on('set-title', function(msg) {
+          $('#title').empty();
+          $('#title').append($('<h1>').text(msg.text)).append($('<h2>').text('set by ' + msg.user + ' on ' + msg.date));
         });
 
         socket.on('add-error', function(msg) {

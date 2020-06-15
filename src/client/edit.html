@@ -3,59 +3,7 @@
     <title>FillIn Client - Administration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-      #waiting-preloader {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-      }
-
-      .unit {
-        position: absolute;
-        top: 50px;
-        left: 50px;
-        cursor: grab;
-        border-radius: 0;
-        font-size: 12px;
-        height: 22px !important;
-        min-width: 50px !important;
-        padding: 0 2px !important;
-        width: auto !important;
-        line-height: 17px !important;
-        border: 2px solid white;
-      }
-
-      .unit:active {
-        cursor: grabbing;
-      }
-
-      .modal h4 {
-        padding-bottom: 8px;
-        margin-left: -2px;
-      }
-
-      .on-call {
-        transform: rotate(90deg);
-      }
-
-      .has-tool {
-        background: url('/tool.png') no-repeat;
-        background-position: right 2px center;
-        padding-right: 10px !important;
-      }
-
-      #fill-in-image {
-        background: url('/fillin-map.png') no-repeat;
-        width: 740px;
-        height: 700px;
-        margin-left: 12px;
-        margin-top: 0px;
-      }
-
-      .modal {
-        overflow-y: visible
-      }
-    </style>
+    <link href="/style.css" rel="stylesheet">
   </head>
   <body>
     <div class="container">
@@ -76,12 +24,32 @@
       </div>
     </div>
 
+    <div id="title">
+      <h1>No Scenario Set</h1>
+      <h2>Default title not changed</h2>
+    </div>
+
     <div id="fillin-board">
       <div id="fill-in-image">
 
       </div>
 
       <div id="units">
+      </div>
+
+      <div class="chat-container">
+        <h1>Fillin Board Chat</h1>
+        <ul id="messages"></ul>
+        <form action="" id="chat-submit">
+          <div class="row">
+            <div class="input-field col s10">
+              <input id="message" autocomplete="off" type="text" placeholder="Enter Chat Message"/>
+            </div>
+            <div class="input-field right-align col s2">
+              <button class="btn">Send</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -90,6 +58,7 @@
         <i class="large material-icons">mode_edit</i>
       </a>
       <ul>
+        <li><a class="btn-floating grey" onclick="showSetTitle()"><i class="material-icons">input</i></a></li>
         <li><a class="btn-floating grey" onclick="showUsers()"><i class="material-icons">people</i></a></li>
         <li><a class="btn-floating red darken-1" onclick="showClearUnits()"><i class="material-icons">clear</i></a></li>
         <li><a class="btn-floating yellow darken-1" onclick="showRemoveUnit()"><i class="material-icons">remove_circle</i></a></li>
@@ -172,12 +141,27 @@
         <h4>Current Users</h4>
         <p id="user-count"></p>
         <ul id="user-list">
-
         </ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" onclick="hideUsers()">Close</button>
       </div>
+    </div>
+
+    <div id="set-title" class="modal">
+      <form action="" id="set-title-form">
+        <div class="modal-content">
+          <h4>Set Scenario Title</h4>
+          <div class="input-field">
+            <input id="set-title-field" type="text" autocomplete="off" placeholder="Scenario Title"/>
+            <label>Scenario Title</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn">Set Title</button>
+          <button class="btn" onclick="hideSetTitle()" type="button">Cancel</button>
+        </div>
+      </form>
     </div>
 
     <div id="waiting-preloader" class="preloader-wrapper big active">
@@ -197,8 +181,70 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
+      var name = 'No Name Set';
+      var e1 = null;
+
       $(function() {
         var socket = io();
+        var last_update = new Date();
+
+        $.fn.draggable = function(){
+          var $this = this,
+          ns = 'draggable_'+(Math.random()+'').replace('.',''),
+          mm = 'mousemove.'+ns,
+          mu = 'mouseup.'+ns,
+          $w = $(window),
+          isFixed = ($this.css('position') === 'fixed'),
+          adjX = 0, adjY = 0;
+
+          $this.mousedown(function(ev){
+              var pos = $this.offset();
+              if (isFixed) {
+                  adjX = $w.scrollLeft(); adjY = $w.scrollTop();
+              }
+              var ox = (ev.pageX - pos.left), oy = (ev.pageY - pos.top);
+              $this.data(ns,{ x : ox, y: oy });
+              $w.on(mm, function(ev){
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  if (isFixed) {
+                      adjX = $w.scrollLeft(); adjY = $w.scrollTop();
+                  }
+                  var offset = $this.data(ns);   
+                  if($this.hasClass('on-call')) {
+                    let oo = ($this.outerWidth() - $this.outerHeight())/2;
+                    $this.css({left: ev.pageX - adjX - offset.x - oo, top: ev.pageY - adjY - offset.y + oo});
+                  } else { 
+                    $this.css({left: ev.pageX - adjX - offset.x, top: ev.pageY - adjY - offset.y});
+                  }
+              });
+              $w.on(mu, function(ev){
+                  $w.off(mm + ' ' + mu).removeData(ns);
+                  if (isFixed) {
+                      adjX = $w.scrollLeft(); adjY = $w.scrollTop();
+                  }
+                  var offset = $this.data(ns);
+                  if($this.hasClass('on-call')) {
+                    let oo = ($this.outerWidth() - $this.outerHeight())/2;
+                    socket.emit('change-unit',{ 
+                      id: $this.attr('id'), 
+                      top: ev.pageY - adjY - offset.y + oo, 
+                      left: ev.pageX - adjX - offset.x - oo
+                    });
+                  } else { 
+                    socket.emit('change-unit',{ 
+                      id: $this.attr('id'), 
+                      top: ev.pageY - adjY - offset.y, 
+                      left: ev.pageX - adjX - offset.x
+                    });
+                  }
+                  
+              });
+          });
+
+          return this;
+      };
 
         $('#sign-in-form').submit(function(e) {
           e.preventDefault();
@@ -234,10 +280,27 @@
           socket.emit('reset-units');
           $('#clear-units').hide();
           return false;
-        })
+        });
+
+        $('#chat-submit').submit(function(e) {
+          e.preventDefault();
+          let message = $('#message').val();
+          if(message == "") return;
+          socket.emit('chat', message);
+          $('#message').val("");
+          return false;
+        });
+
+        $('#set-title-form').submit(function(e){
+          e.preventDefault();
+          let title = $('#set-title-field').val();
+          console.log('setting title to ' + title);
+          socket.emit('set-title', title);
+          hideSetTitle();
+          return false;
+        });
 
         $(document).on('dblclick', '.unit', function() {
-          console.log("dblclick", $(this).attr('id'));
           socket.emit('toggle-on-call', { id: $(this).attr('id') });
         })
 
@@ -248,12 +311,37 @@
           M.toast({
             html: 'You have signed in as ' + msg
           });
+          name = msg;
         });
 
         socket.on('message', function(msg) {
           M.toast({
             html: msg
           });
+        });
+
+        function addMessage(msg) {
+          $('#messages').append($('<li>')
+            .append($('<span>').addClass('name').text(msg.user + ": "))
+            .append($('<span>').addClass('text').text(msg.text))
+            .append($('<span>').addClass('date').text(" (" + msg.date + ")"))
+          );
+          $('#messages').scrollTop($('#messages')[0].scrollHeight);
+        }
+
+        socket.on('chat', function(msg) {
+          addMessage(msg);
+        });
+
+        socket.on('recent-chat', function(msg) {
+          for(let message of msg) {
+            addMessage(message);
+          }
+        });
+
+        socket.on('set-title', function(msg) {
+          $('#title').empty();
+          $('#title').append($('<h1>').text(msg.text)).append($('<h2>').text('set by ' + msg.user + ' on ' + msg.date));
         });
 
         socket.on('users', function(msg) {
@@ -278,8 +366,9 @@
         socket.on('units', function(msg) {
           $('#units').empty();
           for(let i = 0; i < msg.length; i++) {
-            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large ' + msg[i].color + ' unit" draggable="true">'+ msg[i].id +'</a>');
+            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large ' + msg[i].color + ' unit">'+ msg[i].id +'</a>');
             el.css({top: msg[i].top, left: msg[i].left});
+            el.draggable();
             if(msg[i].onCall != null && msg[i].onCall == true) {
               el.addClass('on-call');
             }
@@ -287,6 +376,7 @@
               el.addClass('has-tool');
             }
             $('#units').append(el)
+            e1 = el;
           }
 
           $('#remove-unit-id').empty();
@@ -354,6 +444,13 @@
         $('#clear-units').modal('close');
       }
 
+      function showSetTitle() {
+        $('#set-title').modal('open');
+      }
+
+      function hideSetTitle() {
+        $('#set-title').modal('close');
+      }
     </script>
   </body>
 </html>
