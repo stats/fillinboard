@@ -162,6 +162,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     delete clients[socket.id];
+    io.sockets.emit('users', clientsToStringArray(clients));
     console.log('user disconnected');
   });
 })
