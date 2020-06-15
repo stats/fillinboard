@@ -166,8 +166,8 @@ io.on('connection', (socket) => {
   });
 })
 
-http.listen(4199, () => {
-  console.log('listening on *:4199');
+http.listen(4198, () => {
+  console.log('listening on *:4198');
 })
 
 function clientsToStringArray(clients) {
