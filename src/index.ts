@@ -7,7 +7,7 @@ import socketIo = require('socket.io');
 
 import { createServer, Server } from 'http';
 
-var moment = require('moment');
+var moment = require('moment-timezone');
 
 let app: Application = express();
 
