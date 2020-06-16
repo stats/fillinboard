@@ -15,7 +15,7 @@ const basicAuth = require('express-basic-auth');
 
 var clients = {};
 var units;
-var title = { user: 'system', text: 'Title Not Set', date: moment().tz("America/New York").format('MM/DD/YY HH:mm:ss') }
+var title = { user: 'system', text: 'Title Not Set', date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss') }
 var messages = [];
 
 resetUnits();
@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
     let message = {
       user: clients[socket.id].name,
       text: msg,
-      date: moment().tz("America/New York").format('MM/DD/YY HH:mm:ss')
+      date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss')
     }
     messages.push(message);
     if(messages.length > 50) {
@@ -106,7 +106,7 @@ io.on('connection', (socket) => {
     title = {
       user: clients[socket.id].name,
       text: msg,
-      date: moment().tz("America/New York").format('MM/DD/YY HH:mm:ss')
+      date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss')
     }
     io.sockets.emit('set-title', title);
   })
@@ -143,7 +143,7 @@ io.on('connection', (socket) => {
   socket.on('reset-units', (msg) => {
     console.log("Reset Units called.");
     resetUnits();
-    title = { user: 'system', text: 'Title Not Set', date: moment().tz("America/New York").format('MM/DD/YY HH:mm:ss') };
+    title = { user: 'system', text: 'Title Not Set', date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss') };
     io.sockets.emit('message', clients[socket.id].name + " has reset all units.");
     io.sockets.emit('units', units);
     io.sockets.emit('set-title', title);
