@@ -81,11 +81,9 @@
               <div class="input-field">
                 <select id="add-unit-color">
                   <option value="red">Choose your option</option>
-                  <option value="black">RFD Engine</option>
-                  <option value="blue">RFD Rescue</option>
-                  <option value="red">RFD Truck</option>
-                  <option value="pink">Fill-in Engine</option>
-                  <option value="orange">Fill-in Truck</option>
+                  <option value="black">Engine</option>
+                  <option value="blue">Rescue</option>
+                  <option value="red">Truck</option>
                 </select>
                 <label>Select Unit Color</label>
               </div>
@@ -183,7 +181,6 @@
     <script>
 
       var name = 'No Name Set';
-      var e1 = null;
 
       $(function() {
         var socket = io();
@@ -376,7 +373,6 @@
               el.addClass('has-tool');
             }
             $('#units').append(el)
-            e1 = el;
           }
 
           $('#remove-unit-id').empty();
@@ -391,6 +387,10 @@
           M.toast({
             html: msg + ' joined'
           });
+        });
+
+        socket.on('disconnect', function(reason) {
+          location.reload();
         });
 
         $(document).ready(function() {
