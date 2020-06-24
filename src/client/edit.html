@@ -297,7 +297,7 @@
           return false;
         });
 
-        $(document).on('dblclick', '.unit', function() {
+        $(document).on('dblclick tap', '.unit', function() {
           socket.emit('toggle-on-call', { id: $(this).attr('id') });
         })
 
@@ -363,7 +363,7 @@
         socket.on('units', function(msg) {
           $('#units').empty();
           for(let i = 0; i < msg.length; i++) {
-            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large ' + msg[i].color + ' unit">'+ msg[i].id +'</a>');
+            let el = $('<a id="' + msg[i].id + '" class="btn-floating unselectable btn-large ' + msg[i].color + ' unit" unselectable="on">'+ msg[i].id +'</a>');
             el.css({top: msg[i].top, left: msg[i].left});
             el.draggable();
             if(msg[i].onCall != null && msg[i].onCall == true) {
