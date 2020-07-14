@@ -51,25 +51,35 @@
     padding-right: 10px !important;
 }
 
-#title { 
+#titles { 
     position: absolute;
     top: 5px;
     left: 613px;
 }
 
-#title h1 {
-    font-size: 32px;
+#titles h1 {
+    font-size: 28px;
     font-weight: bold;
     margin: 0;
     padding: 0;
 }
 
-#title h2 {
-    font-size: 1em;
+#titles h2 {
+    font-size: 0.8em;
     font-weight: normal;
     color: #777;
     margin: 0;
     padding: 0;
+}
+
+#title1 {
+    position: absolute;
+    top: 300px;
+}
+
+#title2 {
+    position: absolute;
+    top: 550px;
 }
 
 .chat-container {

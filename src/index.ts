@@ -13,10 +13,20 @@ let app: Application = express();
 
 const basicAuth = require('express-basic-auth');
 
+function defaultTitle() {
+  return [
+    { user: 'system', text: 'On Current Alarm', date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss') },
+    { user: 'system', text: 'On Second Alarm', date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss') },
+    { user: 'system', text: 'Out of Service', date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss') }
+  ];
+}
+
 var clients = {};
 var units;
-var title = { user: 'system', text: 'Title Not Set', date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss') }
+var titles = defaultTitle();
 var messages = [];
+
+
 
 resetUnits();
 
@@ -33,7 +43,7 @@ app.get('/style.css', (req, res) => {
 });
 
 app.get('/fillin-map.png', (req, res) => {
-  res.sendFile(__dirname + '/client/fillin-map-v4.png');
+  res.sendFile(__dirname + '/client/fillin-map-v5.png');
 });
 
 app.get('/DragDropTouch.js', (req, res) => {
@@ -76,7 +86,7 @@ io.on('connection', (socket) => {
   clients[socket.id] = {};
 
   socket.emit('units', units);
-  socket.emit('set-title', title);
+  socket.emit('set-titles', titles);
 
   socket.on('chat', (msg) => {
     let message = {
@@ -96,19 +106,24 @@ io.on('connection', (socket) => {
     clients[socket.id].name = msg;
     socket.emit('signed-in', clients[socket.id].name);
     socket.emit('units', units);
-    socket.emit('set-title', title);
+    socket.emit('set-titles', titles);
     socket.emit('recent-chat', messages);
     io.sockets.emit('users', clientsToStringArray(clients));
     socket.broadcast.emit('joined', clients[socket.id].name);
   });
 
-  socket.on('set-title', (msg) => {
-    title = {
-      user: clients[socket.id].name,
-      text: msg,
-      date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss')
+  socket.on('set-titles', (msg) => {
+    titles = [];
+    for(let t of msg) {
+      titles.push(
+        {
+          user: clients[socket.id].name,
+          text: t,
+          date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss')
+        }
+      )
     }
-    io.sockets.emit('set-title', title);
+    io.sockets.emit('set-titles', titles);
   })
 
   socket.on('change-unit', (msg) => {
@@ -143,10 +158,10 @@ io.on('connection', (socket) => {
   socket.on('reset-units', (msg) => {
     console.log("Reset Units called.");
     resetUnits();
-    title = { user: 'system', text: 'Title Not Set', date: moment().tz("America/New_York").format('MM/DD/YY HH:mm:ss') };
+    titles = defaultTitle();
     io.sockets.emit('message', clients[socket.id].name + " has reset all units.");
     io.sockets.emit('units', units);
-    io.sockets.emit('set-title', title);
+    io.sockets.emit('set-titles', titles);
   });
 
   socket.on('toggle-on-call', (msg) => {

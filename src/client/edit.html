@@ -24,9 +24,20 @@
       </div>
     </div>
 
-    <div id="title">
-      <h1>No Scenario Set</h1>
-      <h2>Default title not changed</h2>
+ 
+    <div id="titles">
+      <div id="title0">
+        <h1>First Alarm</h1>
+        <h2>Default title not changed</h2>
+      </div>
+      <div id="title1">
+        <h1>Second Alarm</h1>
+        <h2>Default title not changed</h2>
+      </div>
+      <div id="title2">
+        <h1>Out of Service</h1>
+        <h2>Default title not changed</h2>
+      </div>
     </div>
 
     <div id="fillin-board">
@@ -151,8 +162,16 @@
         <div class="modal-content">
           <h4>Set Scenario Title</h4>
           <div class="input-field">
-            <input id="set-title-field" type="text" autocomplete="off" placeholder="Scenario Title"/>
-            <label>Scenario Title</label>
+            <input id="set-title-field0" type="text" autocomplete="off" placeholder="First Alarm"/>
+            <label>First Title</label>
+          </div>
+          <div class="input-field">
+            <input id="set-title-field1" type="text" autocomplete="off" placeholder="Second Alarm"/>
+            <label>Second Title</label>
+          </div>
+          <div class="input-field">
+            <input id="set-title-field2" type="text" autocomplete="off" placeholder="Out of Service"/>
+            <label>Third Title</label>
           </div>
         </div>
         <div class="modal-footer">
@@ -290,9 +309,11 @@
 
         $('#set-title-form').submit(function(e){
           e.preventDefault();
-          let title = $('#set-title-field').val();
-          console.log('setting title to ' + title);
-          socket.emit('set-title', title);
+          let titles = [];
+          titles.push($('#set-title-field0').val());
+          titles.push($('#set-title-field1').val());
+          titles.push($('#set-title-field2').val());
+          socket.emit('set-titles', titles);
           hideSetTitle();
           return false;
         });
@@ -336,9 +357,11 @@
           }
         });
 
-        socket.on('set-title', function(msg) {
-          $('#title').empty();
-          $('#title').append($('<h1>').text(msg.text)).append($('<h2>').text('set by ' + msg.user + ' on ' + msg.date));
+        socket.on('set-titles', function(msg) {
+          for(var i = 0; i < 3; i++) {
+          $('#title'+i).empty();
+          $('#title'+i).append($('<h1>').text(msg[i].text)).append($('<h2>').text('set by ' + msg[i].user + ' on ' + msg[i].date));
+          }
         });
 
         socket.on('users', function(msg) {

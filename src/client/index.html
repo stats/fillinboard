@@ -7,9 +7,19 @@
   </head>
   <body>
 
-    <div id="title">
-      <h1>No Scenario Set</h1>
-      <h2>Default title not changed</h2>
+    <div id="titles">
+      <div id="title0">
+        <h1>First Alarm</h1>
+        <h2>Default title not changed</h2>
+      </div>
+      <div id="title1">
+        <h1>Second Alarm</h1>
+        <h2>Default title not changed</h2>
+      </div>
+      <div id="title2">
+        <h1>Out of Service</h1>
+        <h2>Default title not changed</h2>
+      </div>
     </div>
 
     <div id="fillin-board">
@@ -35,9 +45,11 @@
           });
         });
 
-        socket.on('set-title', function(msg) {
-          $('#title').empty();
-          $('#title').append($('<h1>').text(msg.text)).append($('<h2>').text('set by ' + msg.user + ' on ' + msg.date));
+        socket.on('set-titles', function(msg) {
+          for(var i = 0; i < 3; i++) {
+          $('#title'+i).empty();
+          $('#title'+i).append($('<h1>').text(msg[i].text)).append($('<h2>').text('set by ' + msg[i].user + ' on ' + msg[i].date));
+          }
         });
 
         socket.on('add-error', function(msg) {
