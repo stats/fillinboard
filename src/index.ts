@@ -5,8 +5,13 @@ import { BASIC_USERS, ADMIN_USERS } from '../users';
 
 import socketIo = require('socket.io');
 
-//import { createServer, Server } from 'http';
 import * as https from 'https';
+import * as fs from 'fs';
+
+const PORT = process.env.PORT || 443;
+const SSL_KEY = process.env.SSL_KEY || 'key.pem';
+const SSL_CERT = process.env.SSL_CERT || 'cert.pem';
+const SSL_CHAIN = process.env.SSL_CHAIN || 'chain.pem';
 
 var moment = require('moment-timezone');
 
@@ -26,8 +31,6 @@ var clients = {};
 var units;
 var titles = defaultTitle();
 var messages = [];
-
-
 
 resetUnits();
 
@@ -78,9 +81,9 @@ app.use('/admin', basicAuth({
 }), admin);
 
 let options = {
-  key: '/root/certs/server-key.pem',
-  cert: '/root/certs/server-key.pem',
-  ca: '/root/certs/cert-chain.pem'
+  key: fs.readFileSync(SSL_KEY),
+  cert: fs.readFileSync(SSL_CERT),
+  ca: fs.readFileSync(SSL_CHAIN)
 }
 
 let http = https.createServer(options, app);
@@ -189,7 +192,7 @@ io.on('connection', (socket) => {
   });
 })
 
-http.listen(443, () => {
+http.listen(PORT, () => {
   console.log('listening on *:443');
 })
 
