@@ -7,9 +7,9 @@ import * as http from "http";
 import * as fs from "fs";
 
 const PORT = process.env.PORT || 3001;
-const SSO_ENTRY_POINT = process.env.ENTRY_POINT;
-const SSO_ISSUER = process.env.ISSUER;
-const SSO_APP_CERT = process.env.SSO_CERT;
+const SSO_ENTRY_POINT = process.env.SSO_ENTRY_POINT;
+const SSO_ISSUER = process.env.SSO_ISSUER;
+const SSO_APP_CERT = process.env.SSO_APP_CERT;
 const SSO_CLAIM_USER = process.env.SSO_CLAIM_USER;
 const SSO_CLAIM_ADMIN = process.env.SSO_CLAIM_ADMIN;
 
