@@ -1,20 +1,32 @@
 <html>
   <head>
     <title>FillIn Client - Administration</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/style.css" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
   </head>
   <body>
     <div class="container">
-
       <div class="modal" id="sign-in">
         <div class="modal-content">
           <h4>Sign In</h4>
           <div class="row">
             <form action="" id="sign-in-form">
               <div class="input-field">
-                <input id="name" type="text" autocomplete="off" placeholder="Enter your name" class="validate" required/>
+                <input
+                  id="name"
+                  type="text"
+                  autocomplete="off"
+                  placeholder="Enter your name"
+                  class="validate"
+                  required
+                />
                 <label>Enter your name</label>
               </div>
               <button class="btn">Sign In</button>
@@ -24,7 +36,6 @@
       </div>
     </div>
 
- 
     <div id="titles">
       <div id="title0">
         <h1>First Alarm</h1>
@@ -41,12 +52,9 @@
     </div>
 
     <div id="fillin-board">
-      <div id="fill-in-image">
+      <div id="fill-in-image"></div>
 
-      </div>
-
-      <div id="units">
-      </div>
+      <div id="units"></div>
 
       <div class="chat-container">
         <h1>Fillin Board Chat</h1>
@@ -54,7 +62,12 @@
         <form action="" id="chat-submit">
           <div class="row">
             <div class="input-field col s10">
-              <input id="message" autocomplete="off" type="text" placeholder="Enter Chat Message"/>
+              <input
+                id="message"
+                autocomplete="off"
+                type="text"
+                placeholder="Enter Chat Message"
+              />
             </div>
             <div class="input-field right-align col s2">
               <button class="btn">Send</button>
@@ -69,11 +82,31 @@
         <i class="large material-icons">mode_edit</i>
       </a>
       <ul>
-        <li><a class="btn-floating grey" onclick="showSetTitle()"><i class="material-icons">input</i></a></li>
-        <li><a class="btn-floating grey" onclick="showUsers()"><i class="material-icons">people</i></a></li>
-        <li><a class="btn-floating red darken-1" onclick="showClearUnits()"><i class="material-icons">clear</i></a></li>
-        <li><a class="btn-floating yellow darken-1" onclick="showRemoveUnit()"><i class="material-icons">remove_circle</i></a></li>
-        <li><a class="btn-floating green darken-1" onclick="showAddUnit()"><i class="material-icons">add_circle</i></a></li>
+        <li>
+          <a class="btn-floating grey" onclick="showSetTitle()"
+            ><i class="material-icons">input</i></a
+          >
+        </li>
+        <li>
+          <a class="btn-floating grey" onclick="showUsers()"
+            ><i class="material-icons">people</i></a
+          >
+        </li>
+        <li>
+          <a class="btn-floating red darken-1" onclick="showClearUnits()"
+            ><i class="material-icons">clear</i></a
+          >
+        </li>
+        <li>
+          <a class="btn-floating yellow darken-1" onclick="showRemoveUnit()"
+            ><i class="material-icons">remove_circle</i></a
+          >
+        </li>
+        <li>
+          <a class="btn-floating green darken-1" onclick="showAddUnit()"
+            ><i class="material-icons">add_circle</i></a
+          >
+        </li>
       </ul>
     </div>
 
@@ -84,7 +117,12 @@
           <div class="row">
             <div class="row">
               <div class="input-field">
-                <input id="add-unit-id" type="text" autocomplete="off" placeholder="Unit ID"/>
+                <input
+                  id="add-unit-id"
+                  type="text"
+                  autocomplete="off"
+                  placeholder="Unit ID"
+                />
                 <label>Unit ID</label>
               </div>
             </div>
@@ -101,7 +139,7 @@
             </div>
             <div class="row">
               <label>
-                <input id="add-unit-tool" type="checkbox" class="filled-in">
+                <input id="add-unit-tool" type="checkbox" class="filled-in" />
                 <span>Has Tool</span>
               </label>
             </div>
@@ -109,7 +147,9 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn">Add Unit</button>
-          <button class="btn" onclick="hideAddUnit()" type="button">Cancel</button>
+          <button class="btn" onclick="hideAddUnit()" type="button">
+            Cancel
+          </button>
         </div>
       </form>
     </div>
@@ -127,7 +167,9 @@
         </div>
         <div class="modal-footer">
           <button class="btn red">Remove Unit</button>
-          <button class="btn" onclick="hideRemoveUnit()" type="button">Cancel</button>
+          <button class="btn" onclick="hideRemoveUnit()" type="button">
+            Cancel
+          </button>
         </div>
       </form>
     </div>
@@ -140,7 +182,9 @@
       <div class="modal-footer">
         <form action="" class="col s12" id="reset-units">
           <button class="btn red">Reset All Units!</button>
-          <button class="btn" onclick="hideClearUnits()" type="button">Cancel</button>
+          <button class="btn" onclick="hideClearUnits()" type="button">
+            Cancel
+          </button>
         </form>
       </div>
     </div>
@@ -149,8 +193,7 @@
       <div class="modal-content">
         <h4>Current Users</h4>
         <p id="user-count"></p>
-        <ul id="user-list">
-        </ul>
+        <ul id="user-list"></ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" onclick="hideUsers()">Close</button>
@@ -162,21 +205,38 @@
         <div class="modal-content">
           <h4>Set Scenario Title</h4>
           <div class="input-field">
-            <input id="set-title-field0" type="text" autocomplete="off" placeholder="First Alarm"/>
+            <input
+              id="set-title-field0"
+              type="text"
+              autocomplete="off"
+              placeholder="First Alarm"
+            />
             <label>First Title</label>
           </div>
           <div class="input-field">
-            <input id="set-title-field1" type="text" autocomplete="off" placeholder="Second Alarm"/>
+            <input
+              id="set-title-field1"
+              type="text"
+              autocomplete="off"
+              placeholder="Second Alarm"
+            />
             <label>Second Title</label>
           </div>
           <div class="input-field">
-            <input id="set-title-field2" type="text" autocomplete="off" placeholder="Out of Service"/>
+            <input
+              id="set-title-field2"
+              type="text"
+              autocomplete="off"
+              placeholder="Out of Service"
+            />
             <label>Third Title</label>
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn">Set Title</button>
-          <button class="btn" onclick="hideSetTitle()" type="button">Cancel</button>
+          <button class="btn" onclick="hideSetTitle()" type="button">
+            Cancel
+          </button>
         </div>
       </form>
     </div>
@@ -185,9 +245,11 @@
       <div class="spinner-layer spinner-blue-only">
         <div class="circle-clipper left">
           <div class="circle"></div>
-        </div><div class="gap-patch">
+        </div>
+        <div class="gap-patch">
           <div class="circle"></div>
-        </div><div class="circle-clipper right">
+        </div>
+        <div class="circle-clipper right">
           <div class="circle"></div>
         </div>
       </div>
@@ -198,281 +260,319 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      var name = "No Name Set";
 
-      var name = 'No Name Set';
-
-      $(function() {
+      $(function () {
         var socket = io();
         var last_update = new Date();
 
-        $.fn.draggable = function(){
+        $.fn.draggable = function () {
           var $this = this,
-          ns = 'draggable_'+(Math.random()+'').replace('.',''),
-          mm = 'mousemove.'+ns + ' touchmove.'+ns,
-          mu = 'mouseup.'+ns + ' touchend.'+ns,
-          $w = $(window),
-          isFixed = ($this.css('position') === 'fixed'),
-          adjX = 0, adjY = 0;
+            ns = "draggable_" + (Math.random() + "").replace(".", ""),
+            mm = "mousemove." + ns + " touchmove." + ns,
+            mu = "mouseup." + ns + " touchend." + ns,
+            $w = $(window),
+            isFixed = $this.css("position") === "fixed",
+            adjX = 0,
+            adjY = 0;
 
-          $this.on('mousedown touchstart', function(ev){
-              var pos = $this.offset();
+          $this.on("mousedown touchstart", function (ev) {
+            var pos = $this.offset();
+            if (isFixed) {
+              adjX = $w.scrollLeft();
+              adjY = $w.scrollTop();
+            }
+            var ox = ev.pageX - pos.left,
+              oy = ev.pageY - pos.top;
+            $this.data(ns, { x: ox, y: oy });
+            $w.on(mm, function (ev) {
+              ev.preventDefault();
+              ev.stopPropagation();
               if (isFixed) {
-                  adjX = $w.scrollLeft(); adjY = $w.scrollTop();
+                adjX = $w.scrollLeft();
+                adjY = $w.scrollTop();
               }
-              var ox = (ev.pageX - pos.left), oy = (ev.pageY - pos.top);
-              $this.data(ns,{ x : ox, y: oy });
-              $w.on(mm, function(ev){
-                  ev.preventDefault();
-                  ev.stopPropagation();
-                  if (isFixed) {
-                      adjX = $w.scrollLeft(); adjY = $w.scrollTop();
-                  }
-                  var offset = $this.data(ns);   
-                  if($this.hasClass('on-call')) {
-                    let oo = ($this.outerWidth() - $this.outerHeight())/2;
-                    $this.css({left: ev.pageX - adjX - offset.x - oo, top: ev.pageY - adjY - offset.y + oo});
-                  } else { 
-                    $this.css({left: ev.pageX - adjX - offset.x, top: ev.pageY - adjY - offset.y});
-                  }
-              });
-              $w.on(mu, function(ev){
-                  $w.off(mm + ' ' + mu).removeData(ns);
-                  if (isFixed) {
-                      adjX = $w.scrollLeft(); adjY = $w.scrollTop();
-                  }
-                  var offset = $this.data(ns);
-                  if($this.hasClass('on-call')) {
-                    let oo = ($this.outerWidth() - $this.outerHeight())/2;
-                    socket.emit('change-unit',{ 
-                      id: $this.attr('id'), 
-                      top: ev.pageY - adjY - offset.y + oo, 
-                      left: ev.pageX - adjX - offset.x - oo
-                    });
-                  } else { 
-                    socket.emit('change-unit',{ 
-                      id: $this.attr('id'), 
-                      top: ev.pageY - adjY - offset.y, 
-                      left: ev.pageX - adjX - offset.x
-                    });
-                  }
-                  
-              });
+              var offset = $this.data(ns);
+              if ($this.hasClass("on-call")) {
+                let oo = ($this.outerWidth() - $this.outerHeight()) / 2;
+                $this.css({
+                  left: ev.pageX - adjX - offset.x - oo,
+                  top: ev.pageY - adjY - offset.y + oo,
+                });
+              } else {
+                $this.css({
+                  left: ev.pageX - adjX - offset.x,
+                  top: ev.pageY - adjY - offset.y,
+                });
+              }
+            });
+            $w.on(mu, function (ev) {
+              $w.off(mm + " " + mu).removeData(ns);
+              if (isFixed) {
+                adjX = $w.scrollLeft();
+                adjY = $w.scrollTop();
+              }
+              var offset = $this.data(ns);
+              if ($this.hasClass("on-call")) {
+                let oo = ($this.outerWidth() - $this.outerHeight()) / 2;
+                socket.emit("change-unit", {
+                  id: $this.attr("id"),
+                  top: ev.pageY - adjY - offset.y + oo,
+                  left: ev.pageX - adjX - offset.x - oo,
+                });
+              } else {
+                socket.emit("change-unit", {
+                  id: $this.attr("id"),
+                  top: ev.pageY - adjY - offset.y,
+                  left: ev.pageX - adjX - offset.x,
+                });
+              }
+            });
           });
 
           return this;
-      };
+        };
 
-        $('#sign-in-form').submit(function(e) {
+        $("#sign-in-form").submit(function (e) {
           e.preventDefault();
-          socket.emit('submit-name', $('#name').val());
-          $('#sign-in').modal('close');
-          $('#waiting-preloader').show();
+          socket.emit("submit-name", $("#name").val());
+          $("#sign-in").modal("close");
+          $("#waiting-preloader").show();
           return false;
         });
 
-        $('#add-unit-form').submit(function(e) {
+        $("#add-unit-form").submit(function (e) {
           e.preventDefault();
-          console.log("Add Unit", $('#add-unit-tool').val());
-          socket.emit('add-unit', {
-            id: $('#add-unit-id').val(),
-            color: $('#add-unit-color').val(),
-            hasTool: $('#add-unit-tool').is(':checked') ? true : false,
+          console.log("Add Unit", $("#add-unit-tool").val());
+          socket.emit("add-unit", {
+            id: $("#add-unit-id").val(),
+            color: $("#add-unit-color").val(),
+            hasTool: $("#add-unit-tool").is(":checked") ? true : false,
             top: 50,
-            left: 50
+            left: 50,
           });
-          $('#add-unit').hide();
+          $("#add-unit").hide();
           return false;
         });
 
-        $('#remove-unit-form').submit(function(e) {
+        $("#remove-unit-form").submit(function (e) {
           e.preventDefault();
-          socket.emit('remove-unit', {id: $('#remove-unit-id').val()});
-          $('#remove-unit').hide();
+          socket.emit("remove-unit", { id: $("#remove-unit-id").val() });
+          $("#remove-unit").hide();
           return false;
         });
 
-        $('#reset-units').submit(function(e) {
+        $("#reset-units").submit(function (e) {
           e.preventDefault();
-          socket.emit('reset-units');
-          $('#clear-units').hide();
+          socket.emit("reset-units");
+          $("#clear-units").hide();
           return false;
         });
 
-        $('#chat-submit').submit(function(e) {
+        $("#chat-submit").submit(function (e) {
           e.preventDefault();
-          let message = $('#message').val();
-          if(message == "") return;
-          socket.emit('chat', message);
-          $('#message').val("");
+          let message = $("#message").val();
+          if (message == "") return;
+          socket.emit("chat", message);
+          $("#message").val("");
           return false;
         });
 
-        $('#set-title-form').submit(function(e){
+        $("#set-title-form").submit(function (e) {
           e.preventDefault();
           let titles = [];
-          titles.push($('#set-title-field0').val());
-          titles.push($('#set-title-field1').val());
-          titles.push($('#set-title-field2').val());
-          socket.emit('set-titles', titles);
+          titles.push($("#set-title-field0").val());
+          titles.push($("#set-title-field1").val());
+          titles.push($("#set-title-field2").val());
+          socket.emit("set-titles", titles);
           hideSetTitle();
           return false;
         });
 
-        $(document).on('dblclick tap', '.unit', function() {
-          socket.emit('toggle-on-call', { id: $(this).attr('id') });
-        })
+        $(document).on("dblclick tap", ".unit", function () {
+          socket.emit("toggle-on-call", { id: $(this).attr("id") });
+        });
 
-        socket.on('signed-in', function(msg) {
-          $('#waiting-preloader').hide();
-          $('#fillin-board').show();
-          $('.fixed-action-btn').show();
+        socket.on("signed-in", function (msg) {
+          $("#waiting-preloader").hide();
+          $("#fillin-board").show();
+          $(".fixed-action-btn").show();
           M.toast({
-            html: 'You have signed in as ' + msg
+            html: "You have signed in as " + msg,
           });
           name = msg;
         });
 
-        socket.on('message', function(msg) {
+        socket.on("message", function (msg) {
           M.toast({
-            html: msg
+            html: msg,
           });
         });
 
         function addMessage(msg) {
-          $('#messages').append($('<li>')
-            .append($('<span>').addClass('name').text(msg.user + ": "))
-            .append($('<span>').addClass('text').text(msg.text))
-            .append($('<span>').addClass('date').text(" (" + msg.date + ")"))
+          $("#messages").append(
+            $("<li>")
+              .append(
+                $("<span>")
+                  .addClass("name")
+                  .text(msg.user + ": ")
+              )
+              .append($("<span>").addClass("text").text(msg.text))
+              .append(
+                $("<span>")
+                  .addClass("date")
+                  .text(" (" + msg.date + ")")
+              )
           );
-          $('#messages').scrollTop($('#messages')[0].scrollHeight);
+          $("#messages").scrollTop($("#messages")[0].scrollHeight);
         }
 
-        socket.on('chat', function(msg) {
+        socket.on("chat", function (msg) {
           addMessage(msg);
         });
 
-        socket.on('recent-chat', function(msg) {
-          for(let message of msg) {
+        socket.on("recent-chat", function (msg) {
+          for (let message of msg) {
             addMessage(message);
           }
         });
 
-        socket.on('set-titles', function(msg) {
-          for(var i = 0; i < 3; i++) {
-          $('#title'+i).empty();
-          $('#title'+i).append($('<h1>').text(msg[i].text)).append($('<h2>').text('set by ' + msg[i].user + ' on ' + msg[i].date));
+        socket.on("set-titles", function (msg) {
+          for (var i = 0; i < 3; i++) {
+            $("#title" + i).empty();
+            $("#title" + i)
+              .append($("<h1>").text(msg[i].text))
+              .append(
+                $("<h2>").text("set by " + msg[i].user + " on " + msg[i].date)
+              );
           }
         });
 
-        socket.on('users', function(msg) {
-          $('#user-list').empty();
-          $('#user-count').html('<strong>Number signed in: ' + msg.length + '</strong>');
-          if(msg.length == 0) {
-            $('#user-list').append('<li>No users signed in.</li>');
+        socket.on("users", function (msg) {
+          $("#user-list").empty();
+          $("#user-count").html(
+            "<strong>Number signed in: " + msg.length + "</strong>"
+          );
+          if (msg.length == 0) {
+            $("#user-list").append("<li>No users signed in.</li>");
           } else {
-            for(let i = 0; i < msg.length; i++) {
-              let el = $('<li>' + msg[i] + '</li>');
-              $('#user-list').append(el);
+            for (let i = 0; i < msg.length; i++) {
+              let el = $("<li>" + msg[i] + "</li>");
+              $("#user-list").append(el);
             }
           }
         });
 
-        socket.on('add-error', function(msg) {
+        socket.on("add-error", function (msg) {
           M.toast({
-            html: 'Error: ' + msg
+            html: "Error: " + msg,
           });
         });
 
-        socket.on('units', function(msg) {
-          $('#units').empty();
-          for(let i = 0; i < msg.length; i++) {
-            let el = $('<a id="' + msg[i].id + '" class="btn-floating unselectable btn-large ' + msg[i].color + ' unit" unselectable="on">'+ msg[i].id +'</a>');
-            el.css({top: msg[i].top, left: msg[i].left});
+        socket.on("units", function (msg) {
+          $("#units").empty();
+          for (let i = 0; i < msg.length; i++) {
+            let el = $(
+              '<a id="' +
+                msg[i].id +
+                '" class="btn-floating unselectable btn-large ' +
+                msg[i].color +
+                ' unit" unselectable="on">' +
+                msg[i].id +
+                "</a>"
+            );
+            el.css({ top: msg[i].top, left: msg[i].left });
             el.draggable();
-            if(msg[i].onCall != null && msg[i].onCall == true) {
-              el.addClass('on-call');
+            if (msg[i].onCall != null && msg[i].onCall == true) {
+              el.addClass("on-call");
             }
-            if(msg[i].hasTool != null && msg[i].hasTool == true) {
-              el.addClass('has-tool');
+            if (msg[i].hasTool != null && msg[i].hasTool == true) {
+              el.addClass("has-tool");
             }
-            $('#units').append(el)
+            $("#units").append(el);
           }
 
-          $('#remove-unit-id').empty();
-          $('#remove-unit-id').append('<option>Select a unit to remove</option>');
-          for(let i = msg.length - 1; i >= 0; i--) {
-            $('#remove-unit-id').append('<option>' + msg[i].id + '</option>');
+          $("#remove-unit-id").empty();
+          $("#remove-unit-id").append(
+            "<option>Select a unit to remove</option>"
+          );
+          for (let i = msg.length - 1; i >= 0; i--) {
+            $("#remove-unit-id").append("<option>" + msg[i].id + "</option>");
           }
-          $('#remove-unit-id').formSelect();
-        })
+          $("#remove-unit-id").formSelect();
+        });
 
-        socket.on('joined', function(msg){
+        socket.on("joined", function (msg) {
           M.toast({
-            html: msg + ' joined'
+            html: msg + " joined",
           });
         });
 
-        socket.on('disconnect', function(reason) {
+        socket.on("disconnect", function (reason) {
           location.reload();
         });
 
-        $(document).ready(function() {
-          $('#waiting-preloader').hide();
-          $('#fillin-board').hide();
-          $('.fixed-action-btn').floatingActionButton();
-          $('.fixed-action-btn').hide();
-          $('select').formSelect();
-          $('.modal').modal();
-          $('#sign-in').modal({ dismissible: false });
-          $('#sign-in').modal('open');
+        $(document).ready(function () {
+          $("#waiting-preloader").hide();
+          $("#fillin-board").hide();
+          $(".fixed-action-btn").floatingActionButton();
+          $(".fixed-action-btn").hide();
+          $("select").formSelect();
+          $(".modal").modal();
+          // $('#sign-in').modal({ dismissible: false });
+          // $('#sign-in').modal('open');
         });
 
-        $(document).on("dragend", function(event) {
+        $(document).on("dragend", function (event) {
           const dt = $(event.target);
-          const top = event.pageY - dt.height()/2;
-          const left = event.pageX - dt.width()/2;
-          socket.emit('change-unit', {id: dt.attr('id'), top: top, left: left});
+          const top = event.pageY - dt.height() / 2;
+          const left = event.pageX - dt.width() / 2;
+          socket.emit("change-unit", {
+            id: dt.attr("id"),
+            top: top,
+            left: left,
+          });
         });
       });
 
       function showUsers() {
-        $('#users').modal('open');
+        $("#users").modal("open");
       }
 
       function hideUsers() {
-        $('#users').modal('close');
+        $("#users").modal("close");
       }
 
       function showAddUnit() {
-        $("#add-unit").modal('open');
+        $("#add-unit").modal("open");
       }
 
       function hideAddUnit() {
-        $("#add-unit").modal('close');
+        $("#add-unit").modal("close");
       }
 
-      function showRemoveUnit(){
-        $("#remove-unit").modal('open');
+      function showRemoveUnit() {
+        $("#remove-unit").modal("open");
       }
 
       function hideRemoveUnit() {
-        $("#remove-unit").modal('close');
+        $("#remove-unit").modal("close");
       }
 
       function showClearUnits() {
-        $('#clear-units').modal('open');
+        $("#clear-units").modal("open");
       }
 
       function hideClearUnits() {
-        $('#clear-units').modal('close');
+        $("#clear-units").modal("close");
       }
 
       function showSetTitle() {
-        $('#set-title').modal('open');
+        $("#set-title").modal("open");
       }
 
       function hideSetTitle() {
-        $('#set-title').modal('close');
+        $("#set-title").modal("close");
       }
     </script>
   </body>
