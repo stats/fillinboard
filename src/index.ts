@@ -325,5 +325,14 @@ function resetUnits() {
     { id: "T6", top: 369, left: 322, color: "red" },
     { id: "T10", top: 470, left: 216, color: "red" },
     { id: "R11", top: 429, left: 313, color: "blue", hasTool: true },
+    { id: "LDC", top: 716, left: 16, color: "green" },
+    { id: "B1", top: 716, left: 70, color: "green" },
+    { id: "B2", top: 716, left: 124, color: "green" },
+    { id: "C99", top: 716, left: 178, color: "green" },
+    { id: "C91", top: 716, left: 232, color: "green" },
+    { id: "C92", top: 716, left: 286, color: "green" },
+    { id: "C93", top: 716, left: 340, color: "green" },
+    { id: "C94", top: 716, left: 394, color: "green" },
+    { id: "C98", top: 716, left: 448, color: "green" },
   ];
 }

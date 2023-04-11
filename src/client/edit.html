@@ -54,6 +54,8 @@
     <div id="fillin-board">
       <div id="fill-in-image"></div>
 
+      <div id="fill-in-extra"></div>
+
       <div id="units"></div>
 
       <div class="chat-container">
@@ -141,6 +143,61 @@
               <label>
                 <input id="add-unit-tool" type="checkbox" class="filled-in" />
                 <span>Has Tool</span>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <strong
+              >Auto Add Units (will ignore entry above when checked)</strong
+            >
+            <div class="row add-default-unit">
+              <label>
+                <input id="IROF172" type="checkbox" class="filled-in" />
+                <span>IROF172</span>
+              </label>
+              <label>
+                <input id="IROF170" type="checkbox" class="filled-in" />
+                <span>IROF170</span>
+              </label>
+              <label>
+                <input id="BRIF305" type="checkbox" class="filled-in" />
+                <span>BRIF305</span>
+              </label>
+              <label>
+                <input id="BRIF300" type="checkbox" class="filled-in" />
+                <span>BRIF305</span>
+              </label>
+              <label>
+                <input id="RROF254" type="checkbox" class="filled-in" />
+                <span>RROF254</span>
+              </label>
+              <label>
+                <input id="RROF250" type="checkbox" class="filled-in" />
+                <span>RROF250</span>
+              </label>
+              <label>
+                <input id="GATF4512" type="checkbox" class="filled-in" />
+                <span>GATF4512</span>
+              </label>
+              <label>
+                <input id="GATF4530" type="checkbox" class="filled-in" />
+                <span>GATF4530</span>
+              </label>
+              <label>
+                <input id="NGRF274" type="checkbox" class="filled-in" />
+                <span>NGRF274</span>
+              </label>
+              <label>
+                <input id="NGRF270" type="checkbox" class="filled-in" />
+                <span>NGRF270</span>
+              </label>
+              <label>
+                <input id="HENF643" type="checkbox" class="filled-in" />
+                <span>HENF643</span>
+              </label>
+              <label>
+                <input id="PITF380" type="checkbox" class="filled-in" />
+                <span>PITF380</span>
               </label>
             </div>
           </div>
@@ -343,29 +400,165 @@
 
         $("#add-unit-form").submit(function (e) {
           e.preventDefault();
-          console.log("Add Unit", $("#add-unit-tool").val());
-          socket.emit("add-unit", {
-            id: $("#add-unit-id").val(),
-            color: $("#add-unit-color").val(),
-            hasTool: $("#add-unit-tool").is(":checked") ? true : false,
-            top: 50,
-            left: 50,
-          });
-          $("#add-unit").hide();
+          let submit_form = true;
+
+          if ($("#IROF172").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "IROF172",
+              color: "black",
+              hasTool: true,
+              top: 233,
+              left: 461,
+            });
+          }
+
+          if ($("#IROF170").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "IROF170",
+              color: "red",
+              hasTool: true,
+              top: 257,
+              left: 461,
+            });
+          }
+
+          if ($("#BRIF305").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "BRIF305",
+              color: "black",
+              hasTool: false,
+              top: 580,
+              left: 500,
+            });
+          }
+
+          if ($("#BRIF300").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "BRIF300",
+              color: "red",
+              hasTool: true,
+              top: 604,
+              left: 500,
+            });
+          }
+
+          if ($("#RROF254").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "RROF254",
+              color: "black",
+              hasTool: true,
+              top: 220,
+              left: 70,
+            });
+          }
+
+          if ($("#RROF250").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "RROF250",
+              color: "red",
+              hasTool: false,
+              top: 244,
+              left: 70,
+            });
+          }
+
+          if ($("#GATF4512").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "GATF4512",
+              color: "black",
+              hasTool: true,
+              top: 588,
+              left: 90,
+            });
+          }
+
+          if ($("#GATF4530").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "GATF4530",
+              color: "red",
+              hasTool: true,
+              top: 612,
+              left: 90,
+            });
+          }
+
+          if ($("#NGRF274").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "NGRF274",
+              color: "black",
+              hasTool: true,
+              top: 138,
+              left: 64,
+            });
+          }
+
+          if ($("#NGRF270").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "NGRF270",
+              color: "red",
+              hasTool: true,
+              top: 162,
+              left: 64,
+            });
+          }
+
+          if ($("#HENF643").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "HENF643",
+              color: "black",
+              hasTool: true,
+              top: 660,
+              left: 290,
+            });
+          }
+
+          if ($("#PITF380").is(":checked")) {
+            submit_form = false;
+            socket.emit("add-unit", {
+              id: "PITF380",
+              color: "red",
+              hasTool: false,
+              top: 684,
+              left: 290,
+            });
+          }
+
+          if (submit_form) {
+            socket.emit("add-unit", {
+              id: $("#add-unit-id").val(),
+              color: $("#add-unit-color").val(),
+              hasTool: $("#add-unit-tool").is(":checked") ? true : false,
+              top: 50,
+              left: 50,
+            });
+          }
+
+          $("#add-unit").modal("close");
           return false;
         });
 
         $("#remove-unit-form").submit(function (e) {
           e.preventDefault();
           socket.emit("remove-unit", { id: $("#remove-unit-id").val() });
-          $("#remove-unit").hide();
+          $("#remove-unit").modal("close");
           return false;
         });
 
         $("#reset-units").submit(function (e) {
           e.preventDefault();
           socket.emit("reset-units");
-          $("#clear-units").hide();
+          $("#clear-units").modal("close");
           return false;
         });
 

@@ -1,12 +1,17 @@
 <html>
   <head>
     <title>FillIn Client</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/style.css" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
   </head>
   <body>
-
     <div id="titles">
       <div id="title0">
         <h1>First Alarm</h1>
@@ -23,54 +28,65 @@
     </div>
 
     <div id="fillin-board">
-      <div id="fill-in-image">
+      <div id="fill-in-image"></div>
 
-      </div>
+      <div id="fill-in-extra"></div>
 
-      <div id="units">
-      </div>
+      <div id="units"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      $(function() {
+      $(function () {
         var socket = io();
 
-        socket.on('message', function(msg) {
-          console.log('Message', msg);
+        socket.on("message", function (msg) {
+          console.log("Message", msg);
           M.toast({
-            html: msg
+            html: msg,
           });
         });
 
-        socket.on('set-titles', function(msg) {
-          for(var i = 0; i < 3; i++) {
-          $('#title'+i).empty();
-          $('#title'+i).append($('<h1>').text(msg[i].text)).append($('<h2>').text('set by ' + msg[i].user + ' on ' + msg[i].date));
+        socket.on("set-titles", function (msg) {
+          for (var i = 0; i < 3; i++) {
+            $("#title" + i).empty();
+            $("#title" + i)
+              .append($("<h1>").text(msg[i].text))
+              .append(
+                $("<h2>").text("set by " + msg[i].user + " on " + msg[i].date)
+              );
           }
         });
 
-        socket.on('add-error', function(msg) {
-          console.log('error', msg);
+        socket.on("add-error", function (msg) {
+          console.log("error", msg);
           M.toast({
-            html: 'Error: ' + msg
+            html: "Error: " + msg,
           });
         });
 
-        socket.on('units', function(msg) {
-          $('#units').empty();
-          for(let i = 0; i < msg.length; i++) {
-            let el = $('<a id="' + msg[i].id + '" class="btn-floating btn-large ' + msg[i].color + ' unit">'+ msg[i].id +'</a>');
-            el.css({top: msg[i].top, left: msg[i].left});
-            if(msg[i].onCall != null && msg[i].onCall == true) {
-              el.addClass('on-call');
+        socket.on("units", function (msg) {
+          $("#units").empty();
+          for (let i = 0; i < msg.length; i++) {
+            let el = $(
+              '<a id="' +
+                msg[i].id +
+                '" class="btn-floating btn-large ' +
+                msg[i].color +
+                ' unit">' +
+                msg[i].id +
+                "</a>"
+            );
+            el.css({ top: msg[i].top, left: msg[i].left });
+            if (msg[i].onCall != null && msg[i].onCall == true) {
+              el.addClass("on-call");
             }
-            if(msg[i].hasTool != null && msg[i].hasTool == true) {
-              el.addClass('has-tool');
+            if (msg[i].hasTool != null && msg[i].hasTool == true) {
+              el.addClass("has-tool");
             }
-            $('#units').append(el)
+            $("#units").append(el);
           }
         });
       });
